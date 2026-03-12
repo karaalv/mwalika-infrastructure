@@ -1,0 +1,68 @@
+# Workspace settings
+.vscode/
+
+# Mac files
+**/.DS_Store
+
+# Data files
+**/data/
+
+# Windows files
+**/Thumbs.db
+**/Desktop.ini
+
+# Linux files
+*~
+
+# Environment Files
+**/env/
+.env*
+.env.*
+
+# Node dependencies
+**/node_modules/
+
+# Python bytecode
+**/__pycache__/
+**.py[cod]
+
+# Virtual environment
+**/venv/
+
+# R session files
+.Rhistory
+.RData
+.Ruserdata
+
+# RStudio files
+.Rproj.user/
+.Rproj.lock
+
+# Miscellaneous files
+*.bak
+*.tmp
+*.pid
+*.log
+
+# Testing and coverage files
+.coverage
+*.cover
+*.log
+
+# Terraform files
+**/.terraform/
+
+*.tfstate
+*.tfstate.*
+
+*.tfplan
+*.tfplan.*
+
+*.tfvars
+*.tfvars.*
+
+**/override.tf
+**/override.tf.*
+
+# Deployment keys
+**/keys/
