@@ -128,7 +128,7 @@ CodeBuild configuration:
 - Architecture: `arm64`
 - Instance type: `arm1.medium`
 - vCPU: `4`
-- Memory: `8 GB`
+- Memory: `7 GB`
 
 ## 7. Amazon Elastic Container Registry (ECR)
 

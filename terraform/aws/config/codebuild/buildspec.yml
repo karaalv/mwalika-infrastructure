@@ -1,0 +1,40 @@
+# CodeBuild Build Specification
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo "Checking Docker availability..."
+      - |
+        if ! command -v docker &> /dev/null; then
+          echo "Docker is not installed — aborting.";
+          exit 1;
+        else
+          echo "Docker found $(docker --version)";
+        fi
+
+  pre_build:
+    commands:
+      - "echo Logging into Amazon ECR..."
+      - |
+        aws ecr get-login-password --region "$AWS_REGION" |
+        docker login --username AWS --password-stdin \
+        "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com"
+
+  build:
+    commands:
+      - mkdir -p build-scripts
+      - |
+        aws s3 cp \
+        "s3://$BUCKET_NAME/$SCRIPT_LOCATION" \
+        "build-scripts/$SCRIPT_LOCATION"
+      - chmod +x "build-scripts/$SCRIPT_LOCATION"
+      - |
+        ./build-scripts/"$SCRIPT_LOCATION"
+
+  post_build:
+    commands:
+      - rm -rf build-scripts
+
+artifacts:
+  files: []
