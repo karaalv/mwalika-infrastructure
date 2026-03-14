@@ -27,7 +27,7 @@ variable "services_health_map" {
 variable "alarm_emails" {
   type        = list(string)
   description = "Email address to receive CloudWatch alarm notifications"
-  default = ["alvinnjiiri@gmail.com"]
+  default     = ["alvinnjiiri@gmail.com"]
 }
 
 # - SNS Topic and Subscriptions -
@@ -63,19 +63,23 @@ resource "aws_route53_health_check" "mwalika_health_checks" {
 # - CloudWatch Alarms -
 
 resource "aws_cloudwatch_metric_alarm" "hc_alarm" {
-  provider = aws.us_east_1
-  for_each = aws_route53_health_check.mwalika_health_checks
+	provider = aws.us_east_1
+	for_each = var.services_health_map
 
-  alarm_name          = "mwalika-health-check-failure:${each.key}"
-  namespace           = "AWS/Route53"
-  metric_name         = "HealthCheckStatus"
-  statistic           = "Minimum"
-  period              = 60
-  evaluation_periods  = 3
-  threshold           = 1
-  comparison_operator = "LessThanThreshold"
-  dimensions = {
-    HealthCheckId = each.value.id
-  }
-  alarm_actions = [aws_sns_topic.health_alerts.arn]
+	alarm_name          = "mwalika-health-check-failure-${each.key}"
+	namespace           = "AWS/Route53"
+	metric_name         = "HealthCheckStatus"
+	statistic           = "Minimum"
+	period              = 60
+	evaluation_periods  = 3
+	threshold           = 1
+	comparison_operator = "LessThanThreshold"
+
+	dimensions = {
+		HealthCheckId = (
+      aws_route53_health_check.mwalika_health_checks[each.key].id
+    )
+	}
+
+	alarm_actions = [aws_sns_topic.health_alerts.arn]
 }

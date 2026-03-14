@@ -41,6 +41,8 @@ resource "aws_iam_role_policy_attachment" "codebuild_s3_permission" {
 
 # CodeBuild project for building ARM Docker images for services.
 resource "aws_codebuild_project" "arm_docker_build" {
+  provider = aws.us_east_1
+  
   name         = "mwalika-arm-docker-build"
   service_role = aws_iam_role.codebuild_service_role.arn
 

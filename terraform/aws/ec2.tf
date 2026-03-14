@@ -56,9 +56,36 @@ resource "aws_eip" "ec2_elastic_ip" {
   }
 }
 
+# AMI lookup
+data "aws_ami" "ubuntu_arm" {
+	most_recent = true
+
+	owners = ["099720109477"] # Canonical
+
+	filter {
+		name   = "name"
+		values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-arm64-server-*"]
+	}
+
+	filter {
+		name   = "architecture"
+		values = ["arm64"]
+	}
+
+	filter {
+		name   = "virtualization-type"
+		values = ["hvm"]
+	}
+
+	filter {
+		name   = "root-device-type"
+		values = ["ebs"]
+	}
+}
+
 # EC2 Instance Configuration
 resource "aws_instance" "ec2_instance" {
-  ami           = "ami-0a6f6deb4d4539124" # Ubuntu 22.04 ARM
+  ami           = data.aws_ami.ubuntu_arm.id # Ubuntu ARM
   instance_type = "t4g.small"
 
   iam_instance_profile = aws_iam_instance_profile.ec2_access_instance_profile.name
@@ -66,11 +93,12 @@ resource "aws_instance" "ec2_instance" {
   vpc_security_group_ids = [
     aws_security_group.ec2_security_group.id
   ]
-  subnet_id = data.aws_vpc.default.default_subnet_id
+  # Use the first subnet in the default VPC for the EC2 instance
+  subnet_id = data.aws_subnets.default_vpc_subnets.ids[0]
 
   # Startup script
   user_data                   = file("${path.module}/config/ec2/setup.sh")
-  user_data_replace_on_change = true
+  user_data_replace_on_change = false
 
   root_block_device {
     volume_size = 40 # GB
@@ -88,5 +116,9 @@ resource "aws_instance" "ec2_instance" {
     Environment = "production"
     Project     = "mwalika"
     ManagedBy   = "terraform"
+  }
+
+  lifecycle {
+    ignore_changes = [ami]
   }
 }

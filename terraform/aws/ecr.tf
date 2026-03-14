@@ -24,9 +24,9 @@ resource "aws_ecr_repository" "services" {
 
 # Only keep the last 10 images in the repository
 resource "aws_ecr_lifecycle_policy" "services" {
-  for_each = aws_ecr_repository.services
+  for_each = toset(var.services)
 
-  repository = each.value.name
+  repository = aws_ecr_repository.services[each.key].name
 
   policy = jsonencode({
     rules = [

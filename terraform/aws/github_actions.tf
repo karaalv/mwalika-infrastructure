@@ -9,7 +9,7 @@ resource "aws_iam_openid_connect_provider" "github" {
 # repositories and all branches, tags, environments, 
 # and pull requests.
 resource "aws_iam_role" "github_actions_role" {
-  name = "github-actions-role"
+  name = "mwalika-github-actions-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -51,7 +51,7 @@ resource "aws_iam_role_policy_attachment" "s3_readonly_permissions" {
 }
 
 resource "aws_iam_policy" "github_actions_ssm_policy" {
-  name = "GitHubActionsSSMPolicy"
+  name = "MwalikaGitHubActionsSSMPolicy"
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{

@@ -4,6 +4,7 @@
 
 resource "aws_route53_zone" "mwalika" {
   name = "mwalika.com"
+  comment = "Hosted zone for mwalika.com managed by Terraform"
 }
 
 # - Certificate validation record for ACM certificate -
@@ -15,7 +16,16 @@ data "aws_acm_certificate" "cloudfront" {
   most_recent = true
 }
 
-# - Alias record for CloudFront distribution -
+
+resource "aws_route53_record" "www" {
+	zone_id = aws_route53_zone.mwalika.zone_id
+	name    = "www.mwalika.com"
+	type    = "CNAME"
+	ttl     = 300
+	records = ["mwalika.com"]
+}
+
+# - Alias record for CloudFront distributions -
 
 resource "aws_route53_record" "cloudfront_alias" {
   for_each = var.cloudfront_distributions

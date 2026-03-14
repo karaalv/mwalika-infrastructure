@@ -2,6 +2,6 @@ resource "mongodbatlas_project_ip_access_list" "ip_access" {
   for_each = local.mongodb_environments
 
   project_id = mongodbatlas_project.projects[each.key].id
-  cidr_block = each.value.cidrs
+  cidr_block = each.value.cidr
   comment    = "Allow access from EC2 instance for ${each.value.environment} environment"
 }

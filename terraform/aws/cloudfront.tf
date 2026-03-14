@@ -4,7 +4,7 @@
 
 # Cache policy
 resource "aws_cloudfront_cache_policy" "cache_policy" {
-  name        = "cache-policy"
+  name        = "mwalika-cache-policy"
   default_ttl = 0
   min_ttl     = 0
   max_ttl     = 0
@@ -24,7 +24,7 @@ resource "aws_cloudfront_cache_policy" "cache_policy" {
 
 # Origin request policy
 resource "aws_cloudfront_origin_request_policy" "origin_request_policy" {
-  name    = "origin-request-policy"
+  name    = "mwalika-origin-request-policy"
   comment = "Forward all cookies to origin"
 
   cookies_config {
@@ -42,7 +42,7 @@ resource "aws_cloudfront_origin_request_policy" "origin_request_policy" {
 
 # Response headers policy
 resource "aws_cloudfront_response_headers_policy" "cors_policy" {
-  name    = "cors-policy"
+  name    = "mwalika-cors-policy"
   comment = "CORS policy for Mwalika CloudFront distribution"
 
   cors_config {

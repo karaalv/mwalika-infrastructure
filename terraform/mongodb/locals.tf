@@ -22,7 +22,7 @@ locals {
       instance_size = "M0"
       region_name   = "AF_SOUTH_1"
       environment   = "development"
-      cidrs         = ["0.0.0.0/0"]
+      cidr          = "0.0.0.0/0"
     }
 
     test = {
@@ -31,7 +31,7 @@ locals {
       instance_size = "M0"
       region_name   = "AF_SOUTH_1"
       environment   = "test"
-      cidrs         = ["0.0.0.0/0"]
+      cidr          = "0.0.0.0/0"
     }
 
     production = {
@@ -40,7 +40,7 @@ locals {
       instance_size = "M0"
       region_name   = "AF_SOUTH_1"
       environment   = "production"
-      cidrs         = [local.production_access_cidr]
+      cidr          = local.production_access_cidr
     }
   }
 }
