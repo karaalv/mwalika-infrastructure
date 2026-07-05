@@ -2,9 +2,9 @@
 
 # - Hosted Zone for mwalika.com -
 
-resource "aws_route53_zone" "mwalika" {
+data "aws_route53_zone" "mwalika" {
   name = "mwalika.com"
-  comment = "Hosted zone for mwalika.com managed by Terraform"
+  private_zone = false
 }
 
 # - Certificate validation record for ACM certificate -
@@ -18,7 +18,7 @@ data "aws_acm_certificate" "cloudfront" {
 
 
 resource "aws_route53_record" "www" {
-	zone_id = aws_route53_zone.mwalika.zone_id
+	zone_id = data.aws_route53_zone.mwalika.zone_id
 	name    = "www.mwalika.com"
 	type    = "CNAME"
 	ttl     = 300
@@ -30,7 +30,7 @@ resource "aws_route53_record" "www" {
 resource "aws_route53_record" "cloudfront_alias" {
   for_each = var.cloudfront_distributions
 
-  zone_id = aws_route53_zone.mwalika.zone_id
+  zone_id = data.aws_route53_zone.mwalika.zone_id
   name    = each.value.alias
   type    = "A"
 

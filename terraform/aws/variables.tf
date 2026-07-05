@@ -6,5 +6,6 @@ variable "aws_region" {
 
 variable "aws_profile" {
   description = "The profile used to access AWS resources."
+  default     = "personal"
   type        = string
 }
